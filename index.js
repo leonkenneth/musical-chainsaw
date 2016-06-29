@@ -1,22 +1,30 @@
-var xAnimations = {};
-var yAnimations = {};
+var xAnimations = [];
+var yAnimations = [];
 
-function animateX(selector, updateFunction) {
-  xAnimations[selector] = updateFunction;
+[].forEach.call(document.querySelectorAll("[animate-x]"), function (el) {
+  animateX(el, new Function("t", "return " + el.getAttribute("animate-x") + ";"));
+});
+
+[].forEach.call(document.querySelectorAll("[animate-y]"), function (el) {
+  animateY(el, new Function("t", "return " + el.getAttribute("animate-y") + ";"));
+});
+
+function animateX(el, updateFunction) {
+  xAnimations.push([el, updateFunction]);
 }
 
-function animateY(selector, updateFunction) {
-  yAnimations[selector] = updateFunction;
+function animateY(el, updateFunction) {
+  yAnimations.push([el, updateFunction]);
 }
 
 function update() {
-  for (var selector in yAnimations) {
-    translateFromTop(selector, yAnimations[selector](scrolled));
-  }
+  yAnimations.forEach(function (a) {
+    translateFromTop(a[0], a[1](scrolled));
+  });
 
-  for (var selector in xAnimations) {
-    translateFromLeft(selector, xAnimations[selector](scrolled));
-  }
+  xAnimations.forEach(function (a) {
+    translateFromLeft(a[0], a[1](scrolled));
+  });
 }
 
 var scrolled = 0;
@@ -31,8 +39,7 @@ function animationLoop() {
   window.requestAnimationFrame(animationLoop);
 }
 
-function translateFromTop(whatElementSelector, howMuchPx) {
-  var whatElement = document.querySelector(whatElementSelector);
+function translateFromTop(whatElement, howMuchPx) {
   var existingOffset = getOffset(whatElement);
   setTranslation(whatElement, {
     x: existingOffset.x,
@@ -40,8 +47,7 @@ function translateFromTop(whatElementSelector, howMuchPx) {
   });
 }
 
-function translateFromLeft(whatElementSelector, howMuchPx) {
-  var whatElement = document.querySelector(whatElementSelector);
+function translateFromLeft(whatElement, howMuchPx) {
   var existingOffset = getOffset(whatElement);
   setTranslation(whatElement, {
     x: howMuchPx,
