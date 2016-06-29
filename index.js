@@ -1,28 +1,30 @@
-var xAnimations = [];
-var yAnimations = [];
+var animations = {
+  x: [],
+  y: []
+};
 
-[].forEach.call(document.querySelectorAll("[animate-x]"), function (el) {
-  animateX(el, new Function("t", "return " + el.getAttribute("animate-x") + ";"));
+[].forEach.call(document.querySelectorAll("[x]"), function (el) {
+  animateX(el, new Function("t", "return " + el.getAttribute("x") + ";"));
 });
 
-[].forEach.call(document.querySelectorAll("[animate-y]"), function (el) {
-  animateY(el, new Function("t", "return " + el.getAttribute("animate-y") + ";"));
+[].forEach.call(document.querySelectorAll("[y]"), function (el) {
+  animateY(el, new Function("t", "return " + el.getAttribute("y") + ";"));
 });
 
 function animateX(el, updateFunction) {
-  xAnimations.push([el, updateFunction]);
+  animations.x.push([el, updateFunction]);
 }
 
 function animateY(el, updateFunction) {
-  yAnimations.push([el, updateFunction]);
+  animations.y.push([el, updateFunction]);
 }
 
 function update() {
-  yAnimations.forEach(function (a) {
+  animations.y.forEach(function (a) {
     translateFromTop(a[0], a[1](scrolled));
   });
 
-  xAnimations.forEach(function (a) {
+  animations.x.forEach(function (a) {
     translateFromLeft(a[0], a[1](scrolled));
   });
 }
