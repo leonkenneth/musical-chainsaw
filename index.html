@@ -14,12 +14,6 @@
     right: 0;
     left: 0;
     height: 200px;
-    transform: translate(0px, 0px);
-  }
-
-  #box4 {
-    /* Offset it to the left */
-    transform: translate(-200px, 200px);
   }
   </style>
 </head>
@@ -38,59 +32,17 @@
       Box 4
     </div>
   </div>
+  <script src="index.js"></script>
   <script>
-    function update() {
-      var box1Speed = 2;
-      var box2Speed = 1.5;
-      var box3Speed = 0.8;
-      var box4Speed = 0.8;
+    var box1Speed = 2;
+    var box2Speed = 1.5;
+    var box3Speed = 0.8;
+    var box4Speed = 0.8;
 
-      translateFromTop("#box1", box1Speed * scrolled);
-      translateFromTop("#box2", box2Speed * scrolled);
-      translateFromTop("#box3", box3Speed * scrolled);
-      translateFromTop("#box4", scrolled + 200);
-      translateFromLeft("#box4", box4Speed * scrolled);
-    }
-
-    var scrolled = 0;
-    window.addEventListener('scroll', function () {
-      scrolled = window.scrollY;
-    });
-
-    animationLoop();
-
-    function animationLoop() {
-      update();
-      window.requestAnimationFrame(animationLoop);
-    }
-
-    function translateFromTop(whatElementSelector, howMuchPx) {
-      var whatElement = document.querySelector(whatElementSelector);
-      var existingOffset = getOffset(whatElement);
-      setTranslation(whatElement, {
-        x: existingOffset.x,
-        y: howMuchPx
-      });
-    }
-
-    function translateFromLeft(whatElementSelector, howMuchPx) {
-      var whatElement = document.querySelector(whatElementSelector);
-      var existingOffset = getOffset(whatElement);
-      setTranslation(whatElement, {
-        x: howMuchPx,
-        y: existingOffset.y
-      });
-    }
-
-    function getOffset(element) {
-      var els = /translate\((\d*)px, (\d*)px\)/g.exec(element.style.transform);
-      if (els == null)
-        return { x: 0, y: 0 };
-      return { x: parseInt(els[1]), y: parseInt(els[2]) };
-    }
-
-    function setTranslation(element, offset) {
-      element.style.transform = `translate(${offset.x}px, ${offset.y}px)`;
-    }
+    animateY("#box1", (t) => box1Speed * t);
+    animateY("#box2", (t) => box2Speed * t);
+    animateY("#box3", (t) => box3Speed * t);
+    animateY("#box4", (t) => t + 200);
+    animateX("#box4", (t) => box4Speed * t);
   </script>
 </body>
